@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1420</width>
+    <height>1274</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LabViewData</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="GraphicsLayoutWidget" name="xData"/>
+      </item>
+      <item row="1" column="0" alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="lxData">
+        <property name="text">
+         <string>x-axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="GraphicsLayoutWidget" name="yData"/>
+      </item>
+      <item row="3" column="0" alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="lyData">
+        <property name="text">
+         <string>y-axis</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="GraphicsLayoutWidget" name="zData"/>
+      </item>
+      <item row="5" column="0" alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="lzAxis">
+        <property name="text">
+         <string>z-axis</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1420</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open Data File</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GraphicsLayoutWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,162 +1,126 @@
 # LabViewData1
-# Latest: 12/2018
+# Latest: 3/2019
 
-import os
-import time as pause
+import sys
 import numpy as np
-import math
 import csv
-import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
-from tkinter import *
-from tkinter import filedialog
+import pyqtgraph
+from PyQt5 import QtWidgets, uic
 
-# Establish plotly credentials and/or settings
-plotly.tools.set_credentials_file(username='e@demonpore.com', api_key='7HOIUl4yTmgPyY5AA2aI')
-# plotly.tools.set_config_file(world_readable=False, sharing='private')
+class LDApp(QtWidgets.QMainWindow):
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+        Ui_LD = uic.loadUiType("LabViewData.ui")[0]
+        self.ui = Ui_LD()
+        self.ui.setupUi(self)
 
-# Get the data input file
-root = Tk()
-root.withdraw()
-root.update()
-filename = filedialog.askopenfilename(initialdir="C:\\Users\\User\\Desktop\\Demonpore\\Data\\Data\\Feedback",
-                                      title="Select Data File",
-                                      filetypes=(("Excel csv", "*.csv"), ("all files", "*.*")))
-root.destroy()
+        # Signals to slots
+        self.ui.actionOpen.triggered.connect(self.FileDialog)
+        self.ui.actionExit.triggered.connect(self.close)
 
-DataFile = csv.reader(open(filename))
+        # Set up plotting widgets
+        self.xData = self.ui.xData.addPlot()
+        self.yData = self.ui.yData.addPlot()
+        self.zData = self.ui.zData.addPlot()
 
-# Data categories established by Tomi's software
-time = []
-xsetpoint = []
-ysetpoint = []
-zsetpoint = []
-x = []
-y = []
-z = []
+        # Data categories established by Tomi's software
+        self.t = []
+        self.xsetpoint = []
+        self.ysetpoint = []
+        self.zsetpoint = []
+        self.x = []
+        self.y = []
+        self.z = []
 
-# Skip header, then read data
-next(DataFile, None)
-n = 0
-for row in DataFile:
-    time.append(n)
-    n = n + 10
-    xsetpoint.append(float(row[1]))
-    ysetpoint.append(float(row[2]))
-    zsetpoint.append(float(row[3]))
-    x.append(float(row[4]))
-    y.append(float(row[5]))
-    z.append(float(row[6]))
+    # Open File Dialog
+    def FileDialog(self):
+        self.filename = QtWidgets.QFileDialog.getOpenFileName(self,
+                                                              'Open file',
+                                                              'C:\\Users\\User\\Desktop\\Demonpore\\Data',
+                                                              "Data Files (*.csv)")[0]
+        self.DataFile = csv.reader(open(self.filename))
+        next(self.DataFile, None) # Skip header, then read data
+        n = 0
+        for row in self.DataFile:
+            self.t.append(n)
+            n = n + 10
+            self.xsetpoint.append(float(row[1])*5/65535)
+            self.ysetpoint.append(float(row[2])*5/65535)
+            self.zsetpoint.append(float(row[3])*5/65535)
+            self.x.append(float(row[4])*5/65535)
+            self.y.append(float(row[5])*5/65535)
+            self.z.append(float(row[6])*5/65535)
+        self.n = len(self.t)
 
-# Data processing and DFT
-Fs = 10000
-Ts = (time[2] - time[1]) / Fs;
-n = len(time)
-t = np.arange(0, n / Fs, Ts)
-k = np.arange(n)
-T = n / Fs
-frq = k / T
-frq = frq[range(n // 2)]
+        # Scaling, Offsets etc.
+        self.timeoffset = 0
+        self.xscale = []
+        self.yscale = []
+        self.xmin = []
+        self.ymin = []
+        self.xcounter = 0
+        self.ycounter = 0
 
-X = np.fft.fft(x) / n
-X = X[range(n // 2)]
-Y = np.fft.fft(y) / n
-Y = Y[range(n // 2)]
+ #       self.Calibrate()
+        self.Plot()
 
-# Scaling, Offsets etc.
-timeoffset = 0
-xscale = []
-yscale = []
-xmin = []
-ymin = []
-xcounter = 0
-ycounter = 0
+    def Calibrate(self):
+        for i in range(self.n):
+            if self.xsetpoint[i] == 0 and self.xcounter >= self.timeoffset and self.xcounter <= 2 * self.timeoffset:
+                self.xcounter = self.xcounter + 1
+                self.xmin.append(self.x[i])
+                self.xscale.append(1)  # In case no x values are being set
+            elif self.xsetpoint[i] != 0 and self.xcounter >= self.timeoffset and self.xcounter <= 2 * self.timeoffset:
+                self.xcounter - self.xcounter + 1
+                self.xscale.append(self.xsetpoint[i].real / self.x[i].real)
+            else:
+                self.xcounter = 0
+            if self.ysetpoint[i] == 0 and self.ycounter >= self.timeoffset and self.ycounter <= 2 * self.timeoffset:
+                self.ycounter = self.ycounter + 1
+                self.ymin.append(self.y[i])
+                self.yscale.append(1)  # In case no y values are being set
+            elif self.ysetpoint[i] != 0 and self.ycounter >= self.timeoffset and self.ycounter <= 2 * self.timeoffset:
+                self.ycounter = self.ycounter + 1
+                self.yscale.append(self.ysetpoint[i].real / self.y[i].real)
+            else:
+                self.ycounter = 0
 
-for i in range(n):
-    if xsetpoint[i] == 0 and xcounter >= timeoffset and xcounter <= 2 * timeoffset:
-        xcounter = xcounter + 1
-        xmin.append(x[i])
-        xscale.append(1)  # In case no x values are being set
-    elif xsetpoint[i] != 0 and xcounter >= timeoffset and xcounter <= 2 * timeoffset:
-        xcounter - xcounter + 1
-        xscale.append(xsetpoint[i].real / x[i].real)
-    else:
-        xcounter = 0
-    if ysetpoint[i] == 0 and ycounter >= timeoffset and ycounter <= 2 * timeoffset:
-        ycounter = ycounter + 1
-        ymin.append(y[i])
-        yscale.append(1)  # In case no y values are being set
-    elif ysetpoint[i] != 0 and ycounter >= timeoffset and ycounter <= 2 * timeoffset:
-        ycounter = ycounter + 1
-        yscale.append(ysetpoint[i].real / y[i].real)
-    else:
-        ycounter = 0
+        for i in range(self.n):
+            self.x[i] = (self.x[i] - np.average(self.xmin)) * np.average(self.xscale)
+            self.y[i] = (self.y[i] - np.average(self.ymin)) * np.average(self.xscale)
 
-for i in range(n):
-    x[i] = (x[i] - np.average(xmin)) * np.average(xscale)
-    y[i] = (y[i] - np.average(ymin)) * np.average(xscale)
+        print("Average minimum of x = " + str(np.average(self.xmin)))
+        print("Average scale of x position = " + str(np.average(self.xscale)))
+        print("Average minimum of y = " + str(np.average(self.ymin)))
+        print("Average scale of y position = " + str(np.average(self.yscale)))
 
-print("Average minimum of x = " + str(np.average(xmin)))
-print("Average scale of x position = " + str(np.average(xscale)))
-print("Average minimum of y = " + str(np.average(ymin)))
-print("Average scale of y position = " + str(np.average(yscale)))
+    def Plot(self):
 
-# Plot raw data
-trace1 = go.Scattergl(x=time, y=xsetpoint, line=dict(color=('rgb(128,0,0)'), width=1), opacity=.5, name='x-setpoint')
-trace2 = go.Scattergl(x=time, y=ysetpoint, line=dict(color=('rgb(0,128,0)'), width=1), opacity=.5, name='y-setpoint')
-trace3 = go.Scattergl(x=time, y=zsetpoint, line=dict(color=('rgb(0,0,128)'), width=1), opacity=.5, name='z-setpoint')
-trace4 = go.Scattergl(x=time, y=x, line=dict(color=('rgb(255,0,0)'), width=1), name='x')
-trace5 = go.Scattergl(x=time, y=y, line=dict(color=('rgb(0,255,0)'), width=1), name='y')
-trace6 = go.Scattergl(x=time, y=z, line=dict(color=('rgb(0,0,255)'), width=1), name='z')
+        # x-axis Data
+        self.xData.plot(self.t, self.x, pen=(0, 0, 255), linewidth=.05)
+        self.xData.plot(self.t, self.xsetpoint, pen='r', linewidth=.05)
+        self.xData.showGrid(x=True, y=True, alpha=.8)
+        self.xData.addLegend()
+        self.xData.setLabel('left', 'Potential (mV)')
+        self.xData.setLabel('bottom', 'Time (s)')
+        # y-axis Data
+        self.yData.plot(self.t, self.y, pen=(0, 255, 0), linewidth=.05)
+        self.yData.plot(self.t, self.ysetpoint, pen='r', linewidth=.05)
+        self.yData.showGrid(x=True, y=True, alpha=.8)
+        self.yData.addLegend()
+        self.yData.setLabel('left', 'Potential (mV)')
+        self.yData.setLabel('bottom', 'Time (s)')
+        # z-axis Data
+        self.zData.plot(self.t, self.z, pen=(63, 63, 63), linewidth=.05)
+        self.zData.plot(self.t, self.zsetpoint, pen='r', linewidth=.05)
+        self.zData.showGrid(x=True, y=True, alpha=.8)
+        self.zData.addLegend()
+        self.zData.setLabel('left', 'Potential (mV)')
+        self.zData.setLabel('bottom', 'Time (s)')
 
-data = [trace1, trace2, trace3, trace4, trace5, trace6]
 
-plotly.offline.plot({"data": data, "layout":
-    go.Layout(title=os.path.split(filename)[1],
-              xaxis=dict(title='Time (ms)',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(0,0,0)')),
-              yaxis=dict(title='Setpoints vs. Measured Positions',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(0,0,0)'))
-              )
-                     })
-
-pause.sleep(1)  # Apparently necessary pause to get plotly to work with both url graphs
-
-# Plot setpoint and position feedback differences
-xdiff = []
-ydiff = []
-for i in range(n):
-    xdiff.append(xsetpoint[i] - x[i])
-    ydiff.append(ysetpoint[i] - y[i])
-
-trace1 = go.Scattergl(x=frq, y=xdiff, line=dict(color=('rgb(255,0,0)'), width=1), name='x-setpoint')
-trace2 = go.Scattergl(x=frq, y=ydiff, line=dict(color=('rgb(0,255,0)'), width=1), name='y-setpoint')
-
-data = [trace1, trace2]
-
-plotly.offline.plot({"data": data, "layout":
-    go.Layout(title="Setpoint-Position:   " + os.path.split(filename)[1],
-              xaxis=dict(title='Time (ms)',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(0,0,0)')),
-              yaxis=dict(title='Setpoint - Measured Position',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(0,0,0)'))
-              )
-                     })
-
-pause.sleep(1)
-
-# Plot DFT's
-trace1 = go.Scattergl(x=frq, y=abs(X).real, line=dict(color=('rgb(255,0,0)'), width=1), name='DFT of x')
-trace2 = go.Scattergl(x=frq, y=abs(Y).real, line=dict(color=('rgb(0,255,0)'), width=1), name='DFT of y')
-
-data = [trace1, trace2]
-
-plotly.offline.plot({"data": data, "layout":
-    go.Layout(title="DFT:   " + os.path.split(filename)[1],
-              xaxis=dict(title='Frequency (Hz)',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(55,55,55)')),
-              yaxis=dict(title='DFT',
-                         titlefont=dict(family='Courier New, monospace', size=16, color='rgb(0,0,0)'))
-              )
-                     })
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    window = LDApp()
+    window.show()
+    sys.exit(app.exec_())
