@@ -101,21 +101,21 @@ class LDApp(QtWidgets.QMainWindow):
         self.xData.plot(self.t, self.xsetpoint, pen='r', linewidth=.05)
         self.xData.showGrid(x=True, y=True, alpha=.8)
         self.xData.addLegend()
-        self.xData.setLabel('left', 'Potential (mV)')
+        self.xData.setLabel('left', 'Potential (V)')
         self.xData.setLabel('bottom', 'Time (s)')
         # y-axis Data
         self.yData.plot(self.t, self.y, pen=(0, 255, 0), linewidth=.05)
         self.yData.plot(self.t, self.ysetpoint, pen='r', linewidth=.05)
         self.yData.showGrid(x=True, y=True, alpha=.8)
         self.yData.addLegend()
-        self.yData.setLabel('left', 'Potential (mV)')
+        self.yData.setLabel('left', 'Potential (V)')
         self.yData.setLabel('bottom', 'Time (s)')
         # z-axis Data
         self.zData.plot(self.t, self.z, pen=(63, 63, 63), linewidth=.05)
         self.zData.plot(self.t, self.zsetpoint, pen='r', linewidth=.05)
         self.zData.showGrid(x=True, y=True, alpha=.8)
         self.zData.addLegend()
-        self.zData.setLabel('left', 'Potential (mV)')
+        self.zData.setLabel('left', 'Potential (V)')
         self.zData.setLabel('bottom', 'Time (s)')
 
 
