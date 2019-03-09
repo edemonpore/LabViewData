@@ -1,6 +1,7 @@
 # LabViewData1
 # Latest: 3/2019
 
+import os
 import sys
 import numpy as np
 import csv
@@ -38,6 +39,7 @@ class LDApp(QtWidgets.QMainWindow):
                                                               'Open file',
                                                               'C:\\Users\\User\\Desktop\\Demonpore\\Data',
                                                               "Data Files (*.csv)")[0]
+        self.setWindowTitle(os.path.split(self.filename)[1])
         self.DataFile = csv.reader(open(self.filename))
         next(self.DataFile, None) # Skip header, then read data
         n = 0
