@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0bd368bf-cf62-4a4e-807d-37b0b904b8bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/LabViewData.ui" beforeDir="false" afterPath="$PROJECT_DIR$/LabViewData.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LabViewData1.py" beforeDir="false" afterPath="$PROJECT_DIR$/LabViewData1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,19 +16,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LabViewData1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../DataAnalysis3/DataAnalysis3.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="71" />
+            <state relative-caret-position="678">
+              <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
               <folding>
-                <element signature="e#85#94#0" expanded="true" />
+                <element signature="e#33#42#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,6 +38,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="522" />
+    <option name="y" value="2" />
     <option name="width" value="1609" />
     <option name="height" value="2130" />
   </component>
@@ -126,7 +120,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1287" height="1704" extended-state="0" />
+    <frame x="418" y="2" width="1287" height="1704" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
@@ -172,8 +166,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../DataAnalysis3/DataAnalysis3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="71" />
+        <state relative-caret-position="476">
+          <caret line="34" column="8" lean-forward="true" selection-start-line="34" selection-start-column="8" selection-end-line="37" selection-end-column="82" />
           <folding>
             <element signature="e#85#94#0" expanded="true" />
           </folding>
@@ -182,8 +176,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LabViewData1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+        <state relative-caret-position="678">
+          <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
+          <folding>
+            <element signature="e#33#42#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

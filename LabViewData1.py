@@ -2,6 +2,7 @@
 # Latest: 3/2019
 
 import os
+
 import sys
 import numpy as np
 import csv
@@ -18,6 +19,7 @@ class LDApp(QtWidgets.QMainWindow):
         # Signals to slots
         self.ui.actionOpen.triggered.connect(self.FileDialog)
         self.ui.actionExit.triggered.connect(self.close)
+        self.ui.actionScreenshot.triggered.connect(self.Screenshot)
 
         # Set up plotting widgets
         self.xData = self.ui.xData.addPlot()
@@ -35,6 +37,17 @@ class LDApp(QtWidgets.QMainWindow):
 
     # Open File Dialog
     def FileDialog(self):
+        # Data categories established by Tomi's software
+        self.t.clear()
+        self.xsetpoint.clear()
+        self.ysetpoint.clear()
+        self.zsetpoint.clear()
+        self.x.clear()
+        self.y.clear()
+        self.z.clear()
+        self.xData.clear()
+        self.yData.clear()
+        self.zData.clear()
         self.filename = QtWidgets.QFileDialog.getOpenFileName(self,
                                                               'Open file',
                                                               'C:\\Users\\User\\Desktop\\Demonpore\\Data',
@@ -99,26 +112,34 @@ class LDApp(QtWidgets.QMainWindow):
     def Plot(self):
 
         # x-axis Data
-        self.xData.plot(self.t, self.x, pen=(0, 0, 255), linewidth=.05)
-        self.xData.plot(self.t, self.xsetpoint, pen='r', linewidth=.05)
-        self.xData.showGrid(x=True, y=True, alpha=.8)
         self.xData.addLegend()
+        self.xData.plot(self.t, self.x, pen=(0, 127, 255), linewidth=.05, name='Feedback')
+        self.xData.plot(self.t, self.xsetpoint, pen='r', linewidth=.05, name='Setpoint')
+        self.xData.showGrid(x=True, y=True, alpha=.8)
         self.xData.setLabel('left', 'Potential (V)')
-        self.xData.setLabel('bottom', 'Time (s)')
+        self.xData.setLabel('bottom', 'Time (ms)')
         # y-axis Data
-        self.yData.plot(self.t, self.y, pen=(0, 255, 0), linewidth=.05)
-        self.yData.plot(self.t, self.ysetpoint, pen='r', linewidth=.05)
-        self.yData.showGrid(x=True, y=True, alpha=.8)
         self.yData.addLegend()
+        self.yData.plot(self.t, self.y, pen=(0, 255, 127), linewidth=.05, name='Feedback')
+        self.yData.plot(self.t, self.ysetpoint, pen='r', linewidth=.05, name='Setpoint')
+        self.yData.showGrid(x=True, y=True, alpha=.8)
         self.yData.setLabel('left', 'Potential (V)')
-        self.yData.setLabel('bottom', 'Time (s)')
+        self.yData.setLabel('bottom', 'Time (ms)')
         # z-axis Data
-        self.zData.plot(self.t, self.z, pen=(63, 63, 63), linewidth=.05)
-        self.zData.plot(self.t, self.zsetpoint, pen='r', linewidth=.05)
-        self.zData.showGrid(x=True, y=True, alpha=.8)
         self.zData.addLegend()
+        self.zData.plot(self.t, self.z, pen=(63, 63, 63), linewidth=.05, name='Feedback')
+        self.zData.plot(self.t, self.zsetpoint, pen='r', linewidth=.05, name='Setpoint')
+        self.zData.showGrid(x=True, y=True, alpha=.8)
         self.zData.setLabel('left', 'Potential (V)')
-        self.zData.setLabel('bottom', 'Time (s)')
+        self.zData.setLabel('bottom', 'Time (ms)')
+
+    def Screenshot(self):
+        p = QtWidgets.QApplication.primaryScreen().grabWindow(self.winId())
+        filename = QtWidgets.QFileDialog.getSaveFileName(self,
+                                                          'Save file',
+                                                          'C:\\'+os.path.splitext(self.filename)[0],
+                                                          "JPEG Image (*.jpg)")[0]
+        p.save(filename, 'jpg')
 
 
 if __name__ == "__main__":
