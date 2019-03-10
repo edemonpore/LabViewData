@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0bd368bf-cf62-4a4e-807d-37b0b904b8bb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/LabViewData.ui" beforeDir="false" afterPath="$PROJECT_DIR$/LabViewData.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LabViewData1.py" beforeDir="false" afterPath="$PROJECT_DIR$/LabViewData1.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,8 +15,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LabViewData1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="678">
-              <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
+            <state relative-caret-position="582">
+              <caret line="130" column="64" selection-start-line="130" selection-start-column="64" selection-end-line="130" selection-end-column="64" />
               <folding>
                 <element signature="e#33#42#0" expanded="true" />
               </folding>
@@ -176,8 +175,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LabViewData1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="678">
-          <caret line="49" column="25" selection-start-line="49" selection-start-column="25" selection-end-line="49" selection-end-column="25" />
+        <state relative-caret-position="582">
+          <caret line="130" column="64" selection-start-line="130" selection-start-column="64" selection-end-line="130" selection-end-column="64" />
           <folding>
             <element signature="e#33#42#0" expanded="true" />
           </folding>
